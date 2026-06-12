@@ -33,7 +33,7 @@ cmake --build build
 ## Запуск
 
 ```bash
-./build/paracl examples/hello.pcl
+./build/parser/paracl examples/hello.pcl
 ```
 
 ## Тестирование
@@ -54,17 +54,40 @@ ctest --test-dir build
 
 | Путь | Назначение |
 |------|------------|
+| `CMakeLists.txt` | Корневой CMake файл проекта |
 | `include/INode.hpp` | Интерфейсы AST узлов и перечисление операций |
 | `include/Node.hpp` | Классы узлов (`Value`, `Decl`, `Scope`, `Op`, `If`, `While`) |
 | `include/parser.hpp` | Общий заголовок для парсера и лексера |
+| **src/** | **Реализация AST** |
+| `src/CMakeLists.txt` | CMake для библиотеки AST |
 | `src/Node.cpp` | Реализация AST узлов и фабричных функций |
 | `src/driver.cpp` | Точка входа программы |
+| **parser/** | **Лексер и парсер** |
+| `parser/CMakeLists.txt` | CMake для парсера с FLEX/BISON |
 | `parser/lexer.l` | Лексический анализатор (FLEX) |
 | `parser/compiler.y` | Синтаксический анализатор (BISON) |
-| `examples/` | Примеры программ на ParaCL |
-| `tests/` | Набор тестов для проверки функциональности |
+| `parser/driver.cpp` | Драйвер парсера |
+| **tests/** | **Тесты** |
+| `tests/CMakeLists.txt` | CMake для тестов |
+| `tests/*.pcl` | Тестовые программы ParaCL |
+| **examples/** | **Примеры программ** |
+| `examples/*.pcl` | Примеры программ на ParaCL |
 
 ## Архитектура
+
+### Модульная структура CMake
+
+Проект использует модульную структуру CMake для лучшей организации:
+
+- **Корневой CMakeLists.txt** — управляет общими настройками и подключает модули
+- **src/CMakeLists.txt** — собирает статическую библиотеку `paracl_ast` с реализацией AST
+- **parser/CMakeLists.txt** — генерирует парсер/лексер через FLEX/BISON и собирает исполняемый файл
+- **tests/CMakeLists.txt** — определяет все тесты проекта
+
+Такая структура позволяет:
+- Независимо собирать модули
+- Легко добавлять новые компоненты
+- Переиспользовать библиотеку AST в других проектах
 
 ### AST (Abstract Syntax Tree)
 
@@ -129,19 +152,19 @@ output x * 2;
 
 ### Арифметика
 ```bash
-./build/paracl tests/test_operators.pcl
+./build/parser/paracl tests/test_operators.pcl
 # Вывод: 13 7 30 3 1
 ```
 
 ### Циклы
 ```bash
-./build/paracl tests/test_while.pcl
+./build/parser/paracl tests/test_while.pcl
 # Вывод: 0 1 2 3 4 55
 ```
 
 ### Условия
 ```bash
-./build/paracl tests/test_comparisons.pcl
+./build/parser/paracl tests/test_comparisons.pcl
 # Вывод: 1 3 4 5 6
 ```
 
