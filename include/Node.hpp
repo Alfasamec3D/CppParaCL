@@ -23,7 +23,7 @@ class Value final : public INode {
   Value(int v) : val(v) {}
 };
 
-// Deaclaration
+// Declaration
 class Decl final : public INode {
   int val;
   // INode interface
