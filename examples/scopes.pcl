@@ -1,0 +1,12 @@
+global = 100;
+
+{
+    local1 = 10;
+    {
+        local2 = 20;
+        output global + local1 + local2;
+    }
+    output global + local1;
+}
+
+output global;

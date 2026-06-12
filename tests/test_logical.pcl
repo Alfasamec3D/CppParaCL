@@ -1,0 +1,18 @@
+x = 1;
+y = 0;
+
+if (x && y) {
+    output 1;
+}
+
+if (x || y) {
+    output 2;
+}
+
+if (!y) {
+    output 3;
+}
+
+if (x && !y) {
+    output 4;
+}

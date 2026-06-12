@@ -1,0 +1,26 @@
+x = 5;
+y = 10;
+
+if (x < y) {
+    output 1;
+}
+
+if (x > y) {
+    output 2;
+}
+
+if (x == 5) {
+    output 3;
+}
+
+if (x != y) {
+    output 4;
+}
+
+if (x <= 5) {
+    output 5;
+}
+
+if (y >= 10) {
+    output 6;
+}

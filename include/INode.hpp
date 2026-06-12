@@ -2,12 +2,14 @@
 
 #include <string>
 
+// Base interface for all AST nodes
 struct INode {
   virtual int calc() = 0;
   virtual void dump() const = 0;
   virtual ~INode() {}
 };
 
+// Scope interface for managing variable declarations and nested scopes
 struct IScope : public INode {
   virtual IScope* push() = 0;
   virtual IScope* resetScope() const = 0;
@@ -16,7 +18,7 @@ struct IScope : public INode {
   virtual INode* visible(std::string const& var_name) = 0;
 };
 
-// operations
+// Binary and unary operations
 enum class Ops {
   Plus,
   Minus,
@@ -33,10 +35,11 @@ enum class Ops {
   Mul,
   Mod,
   Not,
-  Or
+  Or,
+  And
 };
 
-//ctor functions
+// Factory functions for creating AST nodes
 INode* make_value(int);
 INode* make_op(INode* l, Ops o, INode* r);
 INode* make_while(INode* o, INode* s);

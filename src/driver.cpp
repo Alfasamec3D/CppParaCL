@@ -2,31 +2,32 @@
 
 IScope* currentScope = nullptr;
 
-static int currentinlinePos = 0;
-
 int main(int argc, char* argv[]) {
-  FILE* f = fopen(argv[1], "r");
-  if (f <= 0) {
-    perror("Cannot open file");
+  if (argc < 2) {
+    std::fprintf(stderr, "Usage: %s <source-file>\n", argv[0]);
     return 1;
   }
 
-  yyint = f;
+  FILE* f = std::fopen(argv[1], "r");
+  if (!f) {
+    std::perror("Cannot open file");
+    return 1;
+  }
+
+  yyin = f;
   currentScope = create_scope();
-  yyparse();
-  fclose(f);
+  const int rc = yyparse();
+  std::fclose(f);
   delete currentScope;
 
-  return 0;
+  return rc;
 }
 
-void PrintError(char const* errorstring, ...) { static char errmsg[10000];
+void PrintError(char const* fmt, ...) {
+  char buf[10000];
   va_list args;
-
-  bool isNotNullPar = false;
-  for (int i = 0;i<strlen(errorstring)-1, ++i){
-    if (errorstring[i+1]=='%'&&errorstring[i]!='\\'){
-      isNotNullPar = true;
-      break
-    }
-  } }
+  va_start(args, fmt);
+  std::vsnprintf(buf, sizeof(buf), fmt, args);
+  va_end(args);
+  std::fprintf(stderr, "Error: %s at line %d\n", buf, yylineno);
+}
